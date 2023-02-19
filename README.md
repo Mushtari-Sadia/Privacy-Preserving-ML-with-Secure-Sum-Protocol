@@ -69,7 +69,21 @@ After running above four scripts, no need to rerun them ever again. After the fi
 
 Next work : Put individual data files into container of each party. Then write a script so that each party shards the data into 4 parts, encrypts the shards in the following order of encryption key -> public0 ... public10. (public0 is server's own public key) Then sends encrypted shards to server. Upon receiving, server shuffles all data segments then sends the entire data to client10. client10 decrypts and sends to client9. client9 decrypts and sends to client8.. and so forth, until client1 sends data back to server, then server decrypts data with own private key.
 
+# 20-feb-23
 
+added encryption decryption methods in the following files
+-phase_2.py
+-phase_3.py
+-docker-script5.sh
+-docker-script6.sh
 
-
+Run in the following order :
+1. docker-restart-containers.sh
+2. docker-script2.sh
+3. docker-script3.sh
+4. docker-script4.sh [key generation]
+5. docker-script5.sh [encryption] #causes error
+6. docker-script6.sh [decryption]
+  
+* issues that need to be fixed : public key pickle file is somehow found empty in the clients, so cannot be encrypted
 

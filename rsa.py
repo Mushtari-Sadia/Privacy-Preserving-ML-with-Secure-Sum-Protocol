@@ -24,6 +24,7 @@ class RSA :
 	def __init__(self,client_id=0):
 		self.client_id=client_id
 		self.keys = {}
+		self.ciphertext = []
 		
 		
 	def gcd(self,p,q):
@@ -117,20 +118,28 @@ class RSA :
 	def setPlainText(self,plain_text):
 		self.plaintext = plain_text
 	
-	def createCipherText(self):
+	def createCipher(self):
 		self.ciphertext = []
 		for i in range(len(self.plaintext)):
-			self.ciphertext.append(self.encrypt(ord(self.plaintext[i]),self.keys['public']))
+			if isinstance(self.plaintext, str):
+				self.ciphertext.append(self.encrypt(ord(self.plaintext[i]),self.keys['public']))
+			else :
+				self.ciphertext.append(self.encrypt(self.plaintext[i],self.keys['public']))
 	
-	def createDecryptedText(self):
-		self.decryptedtext = ""
+	def decipher(self):
+		self.decryptedtext = []
 		for i in range(len(self.ciphertext)):
-			self.decryptedtext += chr(self.decrypt(self.ciphertext[i],self.keys['private']))
+			self.decryptedtext.append(self.decrypt(self.ciphertext[i],self.keys['private']))
+	
+	def createDecipheredText(self):
+		self.decipheredtext = ""
+		for i in range(len(self.decryptedtext)):
+			self.decipheredtext += chr(self.decryptedtext[i])
 	
 	def EncryptionDecryption(self):
 		self.generateKeys()
-		self.createCipherText()
-		self.createDecryptedText()
+		self.createCipher()
+		self.decipher()
 
 
 
@@ -168,12 +177,12 @@ class RSA :
 # 	times['Key Generation'] = end_time-start_time
 
 # 	start_time = time.time()
-# 	rsa.createCipherText()
+# 	rsa.createCipher()
 # 	end_time = time.time()
 # 	times['Encryption'] = end_time-start_time
 
 # 	start_time = time.time()
-# 	rsa.createDecryptedText()
+# 	rsa.decipher()
 # 	end_time = time.time()
 # 	times['Decryption'] = end_time-start_time
 

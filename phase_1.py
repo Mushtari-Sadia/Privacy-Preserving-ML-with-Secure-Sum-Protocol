@@ -6,14 +6,15 @@ rsa = RSA(my_client_id)
 rsa.generateKeys()
 
 
-# rsa_test_encryption = RSA()
-# rsa_test_encryption.setPublicKey('public0.pkl')
-# rsa_test_encryption.setPlainText('abcd')
-# rsa_test_encryption.createCipherText()
+rsa_test_encryption = RSA()
+rsa_test_encryption.setPublicKey('public0.pkl')
+rsa_test_encryption.setPlainText('abcd')
+rsa_test_encryption.createCipher()
 
 
-# rsa_test_encryption.setPrivateKey('private0.pkl')
-# rsa_test_encryption.createDecryptedText()
+rsa_test_encryption.setPrivateKey('private0.pkl')
+rsa_test_encryption.decipher()
+rsa_test_encryption.createDecipheredText()
 
-# print(rsa_test_encryption.decryptedtext)
+print(rsa_test_encryption.decipheredtext)
 
