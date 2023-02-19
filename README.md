@@ -63,6 +63,10 @@ Generates private and public key for every single machine locally. Then sends al
 
 Again, container names are : client1...client10 and server.
 
+After running above four scripts, no need to rerun them ever again. After the first time, just run the "docker-restart-containers.sh" script.
+
+
+
 Next work : Put individual data files into container of each party. Then write a script so that each party shards the data into 4 parts, encrypts the shards in the following order of encryption key -> public0 ... public10. (public0 is server's own public key) Then sends encrypted shards to server. Upon receiving, server shuffles all data segments then sends the entire data to client10. client10 decrypts and sends to client9. client9 decrypts and sends to client8.. and so forth, until client1 sends data back to server, then server decrypts data with own private key.
 
 
