@@ -87,3 +87,14 @@ Run in the following order :
   
 * issues that need to be fixed : public key pickle file is somehow found empty in the clients, so cannot be encrypted
 
+# 21-feb-23
+
+Ignore above instructions.
+
+Run following commands
+- `chmod +x build.sh`
+- `chmod +x run.sh`
+- ./build.sh [run only once]
+- ./run.sh [run every time after opening project]
+
+run.sh contains entire secure sum protocol performed on test.txt files on each host. Have to modify this for ML.
