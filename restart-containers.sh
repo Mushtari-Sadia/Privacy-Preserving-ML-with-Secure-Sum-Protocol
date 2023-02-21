@@ -1,4 +1,4 @@
-for i in {1..10}; do
+for i in {1..3}; do
     docker start client$i
 done
 

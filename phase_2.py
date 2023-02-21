@@ -27,9 +27,9 @@ plaintext = process_input('test.txt')
 rsa_test_encryption = RSA()
 
 #We encrypt the gradients with the public keys of all the nodes
-#Serially, from mediator, client1 to client10
+#Serially, from mediator, client1 to client3
 
-for i in range(11):
+for i in range(4):
     print("setting public key :",i)
     rsa_test_encryption.setPublicKey('public'+str(i)+'.pkl')
     rsa_test_encryption.setPlainText(plaintext)

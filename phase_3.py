@@ -15,8 +15,9 @@ client_id = sys.argv[1]
 rsa_test_decryption = RSA()
 rsa_test_decryption.setPrivateKey('private'+str(client_id)+'.pkl')
 
-for i in range(1,11):
+for i in range(1,4):
     with open('encrypted'+str(i)+'.pkl', 'rb') as f:
+        print("decrypting file from client =",i)
         rsa_test_decryption.ciphertext = pickle.load(f)
         #strip off one layer of encryption
         rsa_test_decryption.decipher()
