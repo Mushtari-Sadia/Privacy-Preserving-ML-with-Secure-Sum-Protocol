@@ -308,7 +308,8 @@ Now everyone has all necessary local scripts, all public keys and their own priv
     Basic logistic regression performed on the entire dataset, on a central system, without any partitioning.
 
 ### Scenario : Distributed Trusted
-- [distributed-trusted.sh](distributed-trusted.sh)
+[distributed-trusted.sh](distributed-trusted.sh)
+
   |-----[logreg.py](logreg.py)
   
   |-----[logreg_client.py](logreg_client.py)
@@ -333,7 +334,8 @@ Now everyone has all necessary local scripts, all public keys and their own priv
 ![distributed-trusted6.png](images/distributed-trusted6.png)
 
 ### Scenario : Distributed Untrusted
-- [distributed-untrusted.sh](distributed-untrusted.sh)
+[distributed-untrusted.sh](distributed-untrusted.sh)
+
 |-----[logreg.py](logreg.py)
 
 |-----[logreg_client.py](logreg_client.py)
