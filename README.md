@@ -176,13 +176,13 @@ The protocol is depicted in the following diagrams (Fig 1 and 2)
 Let’s assume, there are i = 1,2,3, …, N parties. Available data to each party is Si.
 
 <p align="center">
-  <img src="images/pres_fig2.png =75%" alt="Alt Text">
+  <img src="images/pres_fig2.png" alt="Alt Text">
   <br>
   <em>Fig 1 : Step 1- Encryption with Elgamal Cryptosystem</em>
 </p>
 
 <p align="center">
-  <img src="images/pres_fig3.png =75%" alt="Alt Text">
+  <img src="images/pres_fig3.png" alt="Alt Text">
   <br>
   <em>Fig 2 : Step 2- Decryption</em>
 </p>
@@ -190,7 +190,7 @@ Let’s assume, there are i = 1,2,3, …, N parties. Available data to each part
 - **Applying Protocol to Gradient Descent Algorithm**
 Most machine learning algorithms can be formulated as an optimization problem, with the goal of minimizing a cost (or objective) function. Also, most optimization problems rely on gradient descent.
 <p align="center">
-  <img src="images/pres_fig4.png =75%" alt="Alt Text">
+  <img src="images/pres_fig4.png" alt="Alt Text">
   <br>
   <em>Fig 3 : Modifications in Gradient Descent to Implement Secure Sum</em>
 </p>
@@ -360,21 +360,21 @@ The distributed untrusted scenario is similar to the trusted scenario, except no
 </p>
 
 <p align="center">
-  <img src="images/run.png =75%" alt="Alt Text">
+  <img src="images/run.png" alt="Alt Text">
   <br>
   <em>run.sh</em>
 </p>
 
 Each client encrypting local file respectively with public keys of client1, client2, client3 and server. Now the local file has 4 layers of encryption. Each encrypted local file is then sent to server.
 <p align="center">
-  <img src="images/encryption.png =75%" alt="Alt Text">
+  <img src="images/encryption.png" alt="Alt Text">
   <br>
   <em>encryption.sh</em>
 </p>
 
 The process of multiple-layer encryption with RSA cryptosystem is implemented in the phase_2.py script.
 <p align="center">
-  <img src="images/phase_2.png =75%" alt="Alt Text">
+  <img src="images/phase_2.png" alt="Alt Text">
   <br>
   <em>phase_2.py</em>
 </p>
@@ -382,36 +382,36 @@ The process of multiple-layer encryption with RSA cryptosystem is implemented in
 All encrypted files are now at the server. According to the protocol, the server will now send all the encrypted files to Party n. Party n will decrypt all files with it's own private key, stripping off one layer of encryption from all files. Then Party n will send all files to Party n-1, which will perform the same operations. Finally, Party 1 will send the files to server, which will decrypt all files with own private key and reconstruct the files.
 
 <p align="center">
-  <img src="images/decryption1.png =75%" alt="Alt Text">
+  <img src="images/decryption1.png" alt="Alt Text">
   <br>
   <em>decryption.sh</em>
 </p>
 <p align="center">
-  <img src="images/decryption2.png =75%" alt="Alt Text">
+  <img src="images/decryption2.png" alt="Alt Text">
   <br>
   <em>decryption.sh</em>
 </p>
 <p align="center">
-  <img src="images/decryption3.png =75%" alt="Alt Text">
+  <img src="images/decryption3.png" alt="Alt Text">
   <br>
   <em>decryption.sh</em>
 </p>
 <p align="center">
-  <img src="images/decryption4.png =75%" alt="Alt Text">
+  <img src="images/decryption4.png" alt="Alt Text">
   <br>
   <em>decryption.sh</em>
 </p>
 
 stripping off one layer of encryption from all files :
 <p align="center">
-  <img src="images/phase_3.png =75%" alt="Alt Text">
+  <img src="images/phase_3.png" alt="Alt Text">
   <br>
   <em>phase_3.py</em>
 </p>
 
 reconstruct the files :
 <p align="center">
-  <img src="images/phase_4.png =75%" alt="Alt Text">
+  <img src="images/phase_4.png" alt="Alt Text">
   <br>
   <em>phase_4.py</em>
 </p>
