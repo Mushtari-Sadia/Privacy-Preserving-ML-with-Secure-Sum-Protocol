@@ -1,6 +1,6 @@
 # CSE-472-Project
 
-# 28-jan-23
+<!--# 28-jan-23
 
 - installed docker desktop from here : https://www.docker.com/
 - after running docker desktop, checked out following articles
@@ -109,15 +109,15 @@ run.sh contains entire secure sum protocol performed on test.txt files on each h
 
 
 
-<!-- # list of work :
+ # list of work :
 - create test_parkinsons.csv and send to each client
 - complete accuracy function
 - send only logreg.py to each client again
 - run inference with existing params, note down accuracy for trusted distributed
-- implement with secure sum -->
+- implement with secure sum 
 
 
-<!-- on train_parkinsons and test_parkinsons :
+ on train_parkinsons and test_parkinsons :
 ==============================================
 Distributed Trusted with 10 epochs -
 client 1,2,3 shows same score (makes sense as parameters (w), x_test and y_test are same)
@@ -143,7 +143,7 @@ Precision score  0.7692307692307693 -->
 A Secure Sum Protocol for Privacy Preserving ML
 
 When multiple parties, each owning a privacy-sensitive dataset, would like to collectively perform analytics on the union of the datasets - problems may arise regarding data privacy and security concerns of each individual party. Current commercial solutions require each party to share their raw data or local aggregates with a trusted third party or a mediator under an appropriate confidential agreement, and have the mediator compute and share the results. 
-![](images/pres_fig1.png)
+![](images/pres_fig1.png =75%)
 
 But what if the mediator is not trustworthy? 
 
@@ -176,13 +176,13 @@ The protocol is depicted in the following diagrams (Fig 1 and 2)
 Let’s assume, there are i = 1,2,3, …, N parties. Available data to each party is Si.
 
 <p align="center">
-  <img src="images/pres_fig2.png" alt="Alt Text">
+  <img src="images/pres_fig2.png =75%" alt="Alt Text">
   <br>
   <em>Fig 1 : Step 1- Encryption with Elgamal Cryptosystem</em>
 </p>
 
 <p align="center">
-  <img src="images/pres_fig3.png" alt="Alt Text">
+  <img src="images/pres_fig3.png =75%" alt="Alt Text">
   <br>
   <em>Fig 2 : Step 2- Decryption</em>
 </p>
@@ -190,7 +190,7 @@ Let’s assume, there are i = 1,2,3, …, N parties. Available data to each part
 - **Applying Protocol to Gradient Descent Algorithm**
 Most machine learning algorithms can be formulated as an optimization problem, with the goal of minimizing a cost (or objective) function. Also, most optimization problems rely on gradient descent.
 <p align="center">
-  <img src="images/pres_fig4.png" alt="Alt Text">
+  <img src="images/pres_fig4.png =75%" alt="Alt Text">
   <br>
   <em>Fig 3 : Modifications in Gradient Descent to Implement Secure Sum</em>
 </p>
@@ -284,16 +284,20 @@ party. On the other hand, the outer summation involves data across parties, and 
 
 ### Building the environment
 - [build.sh](build.sh)
-  ![build](images/build.png)
+  ![build](images/build.png =75%)
   | ---- [create-containers.sh](create-containers.sh)
+  
   | ---- [install-packages-to-containers.sh](install-packages-to-containers.sh)
+  
   | ---- [copy-files-to-containers.sh](copy-files-to-containers.sh)
+  
   sends all the scripts needed to run locally on each computer, such as rsa implementation, logistic regression etc.
+  
   | ---- [send-keys-to-containers.sh](send-keys-to-containers.sh)
 
   Generates private and public key of each container and sends the public keys to every container.
 
-  ![send-keys-to-containers](images/send-keys-to-containers.png)
+  ![send-keys-to-containers](images/send-keys-to-containers.png =75%)
   -    | ----------------- [phase_1.py](phase_1.py)
       generates private and public key of each client and server and then stores them in pickle files locally.
 
@@ -306,32 +310,40 @@ Now everyone has all necessary local scripts, all public keys and their own priv
 ### Scenario : Distributed Trusted
 - [distributed-trusted.sh](distributed-trusted.sh)
   |-----[logreg.py](logreg.py)
+  
   |-----[logreg_client.py](logreg_client.py)
+  
   |-----[logreg_server.py](logreg_server.py)
+  
   |-----[logreg_client_inference.py](logreg_client_inference.py)
 
   Restart containers if needed:
-![distributed-trusted1.png](images/distributed-trusted1.png)
+![distributed-trusted1.png =75%](images/distributed-trusted1.png =75%)
   Remove any previous loss, gradient or parameters file:
-![distributed-trusted2.png](images/distributed-trusted2.png)
+![distributed-trusted2.png =75%](images/distributed-trusted2.png =75%)
   For a certain number of epochs, run [logreg_client.py](logreg_client.py) which loads previously saved model, runs it for one epoch, saves loss and gradient into files, saves the model. Then, the loss and gradient files are sent to server using netcat. Until they reach the server, the file is resent over and over.
-![distributed-trusted3.png](images/distributed-trusted3.png)
-![distributed-trusted4.png](images/distributed-trusted4.png)
+![distributed-trusted3.png =75%](images/distributed-trusted3.png =75%)
+![distributed-trusted4.png =75%](images/distributed-trusted4.png =75%)
 
  In the server, [logreg_server.py](logreg_server.py) is run, which aggregates all the losses and gradients received from each client, generates weights of the model, stores them in file 'params.pkl'. The file is then sent to all clients.
-![distributed-trusted5.png](images/distributed-trusted5.png)
+![distributed-trusted5.png =75%](images/distributed-trusted5.png =75%)
 
 
  Finally, after the model has been trained for specified epochs, the [logreg_client_inference.py](logreg_client_inference.py) file is run on each client locally. Prediction on the test set is generated in each client, and metrics are calculated.
-![distributed-trusted6.png](images/distributed-trusted6.png)
+![distributed-trusted6.png =75%](images/distributed-trusted6.png =75%)
 
 ### Scenario : Distributed Untrusted
 - [distributed-untrusted.sh](distributed-untrusted.sh)
 |-----[logreg.py](logreg.py)
+
 |-----[logreg_client.py](logreg_client.py)
+
 |-----[logreg_server.py](logreg_server.py)
+
 |-----[logreg_client_inference.py](logreg_client_inference.py)
+
 |-----[run.sh](run.sh)
+
   - |-----[encryption.sh](encryption.sh)
     - |-----[phase_2.py](phase_2.py)
     - |-----[rsa.py](rsa.py)
@@ -342,27 +354,27 @@ Now everyone has all necessary local scripts, all public keys and their own priv
 The distributed untrusted scenario is similar to the trusted scenario, except now the losses and gradients are sent from each client to the server following the secure sum protocol. The secure sum protocol is implemented in the [run.sh](run.sh) script. The name of the file that has to be sent is provided as a command line argument to this script.
 
 <p align="center">
-  <img src="images/distributed-untrusted1.png " alt="Alt Text">
+  <img src="images/distributed-untrusted1.png =75% " alt="Alt Text">
   <br>
   <em>distributed-untrusted.sh</em>
 </p>
 
 <p align="center">
-  <img src="images/run.png" alt="Alt Text">
+  <img src="images/run.png =75%" alt="Alt Text">
   <br>
   <em>run.sh</em>
 </p>
 
 Each client encrypting local file respectively with public keys of client1, client2, client3 and server. Now the local file has 4 layers of encryption. Each encrypted local file is then sent to server.
 <p align="center">
-  <img src="images/encryption.png" alt="Alt Text">
+  <img src="images/encryption.png =75%" alt="Alt Text">
   <br>
   <em>encryption.sh</em>
 </p>
 
 The process of multiple-layer encryption with RSA cryptosystem is implemented in the phase_2.py script.
 <p align="center">
-  <img src="images/phase_2.png" alt="Alt Text">
+  <img src="images/phase_2.png =75%" alt="Alt Text">
   <br>
   <em>phase_2.py</em>
 </p>
@@ -370,36 +382,36 @@ The process of multiple-layer encryption with RSA cryptosystem is implemented in
 All encrypted files are now at the server. According to the protocol, the server will now send all the encrypted files to Party n. Party n will decrypt all files with it's own private key, stripping off one layer of encryption from all files. Then Party n will send all files to Party n-1, which will perform the same operations. Finally, Party 1 will send the files to server, which will decrypt all files with own private key and reconstruct the files.
 
 <p align="center">
-  <img src="images/decryption1.png" alt="Alt Text">
+  <img src="images/decryption1.png =75%" alt="Alt Text">
   <br>
   <em>decryption.sh</em>
 </p>
 <p align="center">
-  <img src="images/decryption2.png" alt="Alt Text">
+  <img src="images/decryption2.png =75%" alt="Alt Text">
   <br>
   <em>decryption.sh</em>
 </p>
 <p align="center">
-  <img src="images/decryption3.png" alt="Alt Text">
+  <img src="images/decryption3.png =75%" alt="Alt Text">
   <br>
   <em>decryption.sh</em>
 </p>
 <p align="center">
-  <img src="images/decryption4.png" alt="Alt Text">
+  <img src="images/decryption4.png =75%" alt="Alt Text">
   <br>
   <em>decryption.sh</em>
 </p>
 
 stripping off one layer of encryption from all files :
 <p align="center">
-  <img src="images/phase_3.png" alt="Alt Text">
+  <img src="images/phase_3.png =75%" alt="Alt Text">
   <br>
   <em>phase_3.py</em>
 </p>
 
 reconstruct the files :
 <p align="center">
-  <img src="images/phase_4.png" alt="Alt Text">
+  <img src="images/phase_4.png =75%" alt="Alt Text">
   <br>
   <em>phase_4.py</em>
 </p>
@@ -410,15 +422,18 @@ reconstruct the files :
 ### Dataset : [SUSY Dataset](https://archive.ics.uci.edu/ml/datasets/SUSY)
 #### Dataset Description :
 A classification dataset to distinguish between a signal process which produces supersymmetric particles and a background process which does not.
-![dataset](images/dataset.png)
+![dataset](images/dataset.png =75%)
 
 **Train set : 10000
 Test set : 2000**
 
 **Centralized Trusted with 20 epochs -**
 Accuracy : 0.6565
+
 Precision : 0.8303571428571429
+
 Recall : 0.3069306930693069
+
 Latency: 0.22549176216125488 seconds
 
 **Distributed : Client 1,2,3 shows same score (makes sense as parameters (w), x_test and y_test are same)**
@@ -426,14 +441,20 @@ Latency: 0.22549176216125488 seconds
 
 **Distributed Trusted with 20 epochs -**
 Accuracy for client x :  0.558
+
 Precision for client x :  0.5092387287509239
+
 Recall for client x :  0.757975797579758
+
 Latency : 737 seconds
 
 **Distributed Untrusted with 20 epochs -**
 Accuracy for client x :  0.5775
+
 Precision for client x :  0.5594795539033457
+
 Recall for client x :  0.3311331133113311
+
 Latency : 6439 seconds
 
 
