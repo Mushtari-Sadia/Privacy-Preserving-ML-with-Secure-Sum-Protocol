@@ -143,7 +143,7 @@ Precision score  0.7692307692307693 -->
 A Secure Sum Protocol for Privacy Preserving ML
 
 When multiple parties, each owning a privacy-sensitive dataset, would like to collectively perform analytics on the union of the datasets - problems may arise regarding data privacy and security concerns of each individual party. Current commercial solutions require each party to share their raw data or local aggregates with a trusted third party or a mediator under an appropriate confidential agreement, and have the mediator compute and share the results. 
-![](images/pres_fig1.png =75%)
+![](images/pres_fig1.png)
 
 But what if the mediator is not trustworthy? 
 
@@ -284,7 +284,7 @@ party. On the other hand, the outer summation involves data across parties, and 
 
 ### Building the environment
 - [build.sh](build.sh)
-  ![build](images/build.png =75%)
+  ![build](images/build.png)
   | ---- [create-containers.sh](create-containers.sh)
   
   | ---- [install-packages-to-containers.sh](install-packages-to-containers.sh)
@@ -297,7 +297,7 @@ party. On the other hand, the outer summation involves data across parties, and 
 
   Generates private and public key of each container and sends the public keys to every container.
 
-  ![send-keys-to-containers](images/send-keys-to-containers.png =75%)
+  ![send-keys-to-containers](images/send-keys-to-containers.png)
   -    | ----------------- [phase_1.py](phase_1.py)
       generates private and public key of each client and server and then stores them in pickle files locally.
 
@@ -318,19 +318,19 @@ Now everyone has all necessary local scripts, all public keys and their own priv
   |-----[logreg_client_inference.py](logreg_client_inference.py)
 
   Restart containers if needed:
-![distributed-trusted1.png =75%](images/distributed-trusted1.png =75%)
+![distributed-trusted1.png](images/distributed-trusted1.png)
   Remove any previous loss, gradient or parameters file:
-![distributed-trusted2.png =75%](images/distributed-trusted2.png =75%)
+![distributed-trusted2.png](images/distributed-trusted2.png)
   For a certain number of epochs, run [logreg_client.py](logreg_client.py) which loads previously saved model, runs it for one epoch, saves loss and gradient into files, saves the model. Then, the loss and gradient files are sent to server using netcat. Until they reach the server, the file is resent over and over.
-![distributed-trusted3.png =75%](images/distributed-trusted3.png =75%)
-![distributed-trusted4.png =75%](images/distributed-trusted4.png =75%)
+![distributed-trusted3.png](images/distributed-trusted3.png)
+![distributed-trusted4.png](images/distributed-trusted4.png)
 
  In the server, [logreg_server.py](logreg_server.py) is run, which aggregates all the losses and gradients received from each client, generates weights of the model, stores them in file 'params.pkl'. The file is then sent to all clients.
-![distributed-trusted5.png =75%](images/distributed-trusted5.png =75%)
+![distributed-trusted5.png](images/distributed-trusted5.png)
 
 
  Finally, after the model has been trained for specified epochs, the [logreg_client_inference.py](logreg_client_inference.py) file is run on each client locally. Prediction on the test set is generated in each client, and metrics are calculated.
-![distributed-trusted6.png =75%](images/distributed-trusted6.png =75%)
+![distributed-trusted6.png](images/distributed-trusted6.png)
 
 ### Scenario : Distributed Untrusted
 - [distributed-untrusted.sh](distributed-untrusted.sh)
@@ -354,7 +354,7 @@ Now everyone has all necessary local scripts, all public keys and their own priv
 The distributed untrusted scenario is similar to the trusted scenario, except now the losses and gradients are sent from each client to the server following the secure sum protocol. The secure sum protocol is implemented in the [run.sh](run.sh) script. The name of the file that has to be sent is provided as a command line argument to this script.
 
 <p align="center">
-  <img src="images/distributed-untrusted1.png =75% " alt="Alt Text">
+  <img src="images/distributed-untrusted1.png " alt="Alt Text">
   <br>
   <em>distributed-untrusted.sh</em>
 </p>
@@ -422,7 +422,7 @@ reconstruct the files :
 ### Dataset : [SUSY Dataset](https://archive.ics.uci.edu/ml/datasets/SUSY)
 #### Dataset Description :
 A classification dataset to distinguish between a signal process which produces supersymmetric particles and a background process which does not.
-![dataset](images/dataset.png =75%)
+![dataset](images/dataset.png)
 
 **Train set : 10000
 Test set : 2000**
