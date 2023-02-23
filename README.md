@@ -428,34 +428,34 @@ A classification dataset to distinguish between a signal process which produces 
 Test set : 2000**
 
 **Centralized Trusted with 20 epochs -**
-Accuracy : 0.6565
+- Accuracy : 0.6565
 
-Precision : 0.8303571428571429
+- Precision : 0.8303571428571429
 
-Recall : 0.3069306930693069
+- Recall : 0.3069306930693069
 
-Latency: 0.22549176216125488 seconds
+- Latency: 0.22549176216125488 seconds
 
 **Distributed : Client 1,2,3 shows same score (makes sense as parameters (w), x_test and y_test are same)**
 
 
 **Distributed Trusted with 20 epochs -**
-Accuracy for client x :  0.558
+- Accuracy for client x :  0.558
 
-Precision for client x :  0.5092387287509239
+- Precision for client x :  0.5092387287509239
 
-Recall for client x :  0.757975797579758
+- Recall for client x :  0.757975797579758
 
-Latency : 737 seconds
+- Latency : 737 seconds
 
 **Distributed Untrusted with 20 epochs -**
-Accuracy for client x :  0.5775
+- Accuracy for client x :  0.5775
 
-Precision for client x :  0.5594795539033457
+- Precision for client x :  0.5594795539033457
 
-Recall for client x :  0.3311331133113311
+- Recall for client x :  0.3311331133113311
 
-Latency : 6439 seconds
+- Latency : 6439 seconds
 
 
 
