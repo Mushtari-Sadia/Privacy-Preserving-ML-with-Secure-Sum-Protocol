@@ -90,9 +90,24 @@ class SVM:
         prediction =  np.sign(approx)
         return np.where(prediction == -1, 0, 1)
 
-    # np.mean([max(0, 1 - x * y) for x, y in zip(new_actual, new_predicted)])
     def hinge_loss(self, y, y_pred):
-        return np.mean([max(0, 1 - x * y) for x, y in zip(y, y_pred)])
+        loss = self.lambda_param * np.dot(self.w, self.w)
+        loss += np.mean(np.maximum(0, 1 - y * y_pred))
+        return loss
+
+
+    # def hingeloss(self, w, b, x, y):
+    #     # Regularizer term
+    #     reg = 0.5 * (w * w)
+    #
+    #     for i in range(x.shape[0]):
+    #         # Optimization term
+    #         opt_term = y[i] * ((np.dot(w, x[i])) + b)
+    #
+    #         # calculating loss
+    #         loss = reg + self.C * max(0, 1 - opt_term)
+    #     return loss[0][0]
+
 
 X, y = load_dataset('parkinsons.csv')
 
