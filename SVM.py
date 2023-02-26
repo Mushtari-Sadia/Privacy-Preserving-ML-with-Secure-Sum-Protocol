@@ -4,6 +4,13 @@ import pandas as pd
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 
+accuracy_list = []
+loss_list = []
+
+def accuracy(y_true, y_pred):
+    accuracy = np.sum(y_true==y_pred) / len(y_true)
+    return accuracy
+
 def load_dataset(path):
     """
     function for reading data from csv
@@ -49,7 +56,7 @@ def split_dataset(X, y, test_size=0.2, shuffle=True):
 
 class SVM:
 
-    def __init__(self, learning_rate=0.01, lambda_param=0.01, n_iters=1000):
+    def __init__(self, learning_rate=0.001, lambda_param=0.01, n_iters=1000):
         self.lr = learning_rate
         self.lambda_param = lambda_param
         self.n_iters = n_iters
@@ -82,7 +89,13 @@ class SVM:
 
             approx = np.dot(X, self.w) - self.b
             prediction = np.sign(approx)
-            print("Hinge Loss: ", self.hinge_loss(y_, prediction))
+            # print("Hinge Loss: ", self.hinge_loss(y_, prediction))
+
+            prediction = np.where(prediction == -1, 0, 1)
+            # print("Accuracy: ", accuracy(y, prediction))
+
+            accuracy_list.append(accuracy(y, prediction))
+            loss_list.append(self.hinge_loss(y_, prediction))
 
 
     def predict(self, X):
@@ -125,8 +138,22 @@ predictions = clf.predict(X_test)
 print("predictions: ", predictions)
 print("y_test: ", y_test)
 
-def accuracy(y_true, y_pred):
-    accuracy = np.sum(y_true==y_pred) / len(y_true)
-    return accuracy
+
 
 print("SVM Accuracy: ", accuracy(y_test, predictions))
+
+import matplotlib.pyplot as plt
+
+#plotting the accuracy
+plt.plot(accuracy_list)
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.title('Accuracy vs Iterations')
+plt.show()
+
+#plotting the loss
+plt.plot(loss_list)
+plt.xlabel('Iterations')
+plt.ylabel('Loss')
+plt.title('Loss vs Iterations')
+plt.show()
