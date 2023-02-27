@@ -13,15 +13,35 @@ def accuracy(y_true, y_pred):
 def precision(y_true, y_pred):
     tp = np.sum(y_true * y_pred)
     fp = np.sum((1-y_true) * y_pred)
+    # tn = np.sum((1-y_true) * (1-y_pred))
+    # fn = np.sum(y_true * (1-y_pred))
+    #
+    # print("tn: ", tn)
+    # print("fn: ", fn)
+    # print("fp: ", fp)
+    # print("tp: ", tp)
+
+    if tp == 0:
+        # print("tp is 0")
+        return 0
+
     return tp / (tp + fp)
 def recall(y_true, y_pred):
     tp = np.sum(y_true * y_pred)
     fn = np.sum(y_true * (1-y_pred))
     # print("fn: ", fn)
+
+    if tp == 0:
+        # print("tp is 0")
+        return 0
     return tp / (tp + fn)
 def f1_score(y_true, y_pred):
     p = precision(y_true, y_pred)
     r = recall(y_true, y_pred)
+
+    if p == 0 or r == 0:
+        # print("p or r is 0")
+        return 0
     return 2*p*r / (p+r)
 
 def load_dataset(path):
@@ -32,13 +52,18 @@ def load_dataset(path):
     """
     csv = pd.read_csv(path)
 
-    csv = csv.drop('name', axis=1)
+    # csv = csv.drop('name', axis=1)
+    #
+    # # print(csv['status'].value_counts())
+    #
+    # y = csv['status'].values
+    #
+    # X = csv.drop('status', axis=1).values
 
-    # print(csv['status'].value_counts())
-
-    y = csv['status'].values
-
-    X = csv.drop('status', axis=1).values
+    #take the first column as the class
+    y = csv.iloc[:, 0].values
+    #take the rest of the columns as the features
+    X = csv.iloc[:, 1:].values
 
     X = (X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0))
     return X, y
@@ -69,7 +94,7 @@ def split_dataset(X, y, test_size=0.2, shuffle=True):
 
 class SVM:
 
-    def __init__(self, learning_rate=0.001, lambda_param=0.01, n_iters=1000):
+    def __init__(self, learning_rate=0.0001, lambda_param=0.01, n_iters=1000):
         self.lr = learning_rate
         self.lambda_param = lambda_param
         self.n_iters = n_iters
@@ -127,7 +152,7 @@ class SVM:
 
 
 
-X, y = load_dataset('parkinsons.csv')
+X, y = load_dataset('train_susy.csv')
 
 X_train, y_train, X_test,  y_test = split_dataset(X, y, test_size=0.2, shuffle=True)
 
