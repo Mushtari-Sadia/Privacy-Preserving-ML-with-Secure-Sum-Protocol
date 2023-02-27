@@ -10,6 +10,19 @@ loss_list = []
 def accuracy(y_true, y_pred):
     accuracy = np.sum(y_true==y_pred) / len(y_true)
     return accuracy
+def precision(y_true, y_pred):
+    tp = np.sum(y_true * y_pred)
+    fp = np.sum((1-y_true) * y_pred)
+    return tp / (tp + fp)
+def recall(y_true, y_pred):
+    tp = np.sum(y_true * y_pred)
+    fn = np.sum(y_true * (1-y_pred))
+    # print("fn: ", fn)
+    return tp / (tp + fn)
+def f1_score(y_true, y_pred):
+    p = precision(y_true, y_pred)
+    r = recall(y_true, y_pred)
+    return 2*p*r / (p+r)
 
 def load_dataset(path):
     """
@@ -96,6 +109,10 @@ class SVM:
 
             accuracy_list.append(accuracy(y, prediction))
             loss_list.append(self.hinge_loss(y_, prediction))
+            print("Accuracy: ", accuracy(y, prediction))
+            print("Precision: ", precision(y, prediction))
+            print("Recall: ", recall(y, prediction))
+            print("F1 Score: ", f1_score(y, prediction))
 
 
     def predict(self, X):
@@ -109,18 +126,6 @@ class SVM:
         return loss
 
 
-    # def hingeloss(self, w, b, x, y):
-    #     # Regularizer term
-    #     reg = 0.5 * (w * w)
-    #
-    #     for i in range(x.shape[0]):
-    #         # Optimization term
-    #         opt_term = y[i] * ((np.dot(w, x[i])) + b)
-    #
-    #         # calculating loss
-    #         loss = reg + self.C * max(0, 1 - opt_term)
-    #     return loss[0][0]
-
 
 X, y = load_dataset('parkinsons.csv')
 
@@ -132,7 +137,7 @@ print("y_train: ", y_train.shape)
 print("y_test: ", y_test.shape)
 
 
-clf = SVM(n_iters=1000)
+clf = SVM(n_iters=100)
 clf.fit(X_train, y_train)
 predictions = clf.predict(X_test)
 print("predictions: ", predictions)
@@ -141,6 +146,9 @@ print("y_test: ", y_test)
 
 
 print("SVM Accuracy: ", accuracy(y_test, predictions))
+print("SVM Precision: ", precision(y_test, predictions))
+print("SVM Recall: ", recall(y_test, predictions))
+print("SVM F1 Score: ", f1_score(y_test, predictions))
 
 import matplotlib.pyplot as plt
 
