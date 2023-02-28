@@ -1,8 +1,8 @@
-import datasets as datasets
 import numpy as np
 import pandas as pd
-from sklearn import datasets
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, precision_score, recall_score
+import time
+from dataset import *
 
 accuracy_list = []
 loss_list = []
@@ -19,15 +19,18 @@ def load_dataset(path):
     """
     csv = pd.read_csv(path)
 
-    csv = csv.drop('name', axis=1)
+    # csv = csv.drop('name', axis=1)
+
 
     # print(csv['status'].value_counts())
 
-    y = csv['status'].values
+    y = csv.iloc[:, 0].values
 
-    X = csv.drop('status', axis=1).values
+    X = csv.drop(csv.columns[0], axis=1).values
 
     X = (X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0))
+
+    print("X.shape",X.shape)
     return X, y
 
 
@@ -56,12 +59,12 @@ def split_dataset(X, y, test_size=0.2, shuffle=True):
 
 class SVM:
 
-    def __init__(self, learning_rate=0.001, lambda_param=0.01, n_iters=1000):
+    def __init__(self, learning_rate=0.00001, lambda_param=0.01, n_iters=1000):
         self.lr = learning_rate
         self.lambda_param = lambda_param
         self.n_iters = n_iters
         self.w = None
-        self.b = None
+        self.b = 0
 
 
     def fit(self, X, y):
@@ -76,6 +79,8 @@ class SVM:
             dw = 0
             db = 0
             for idx, x_i in enumerate(X):
+                print('idx',idx)
+                print('x_i',x_i.shape)
                 condition = y_[idx] * (np.dot(x_i, self.w) - self.b) >= 1
                 if condition:
                     dw += self.lr * (2 * self.lambda_param * self.w)
@@ -84,8 +89,7 @@ class SVM:
                     dw += self.lr * (2 * self.lambda_param * self.w - np.dot(x_i, y_[idx]))
                     db += self.lr * y_[idx]
 
-            self.w -= dw
-            self.b -= db
+            
 
             approx = np.dot(X, self.w) - self.b
             prediction = np.sign(approx)
@@ -96,6 +100,9 @@ class SVM:
 
             accuracy_list.append(accuracy(y, prediction))
             loss_list.append(self.hinge_loss(y_, prediction))
+
+            self.w -= dw
+            self.b -= db
 
 
     def predict(self, X):
@@ -122,38 +129,57 @@ class SVM:
     #     return loss[0][0]
 
 
-X, y = load_dataset('parkinsons.csv')
+if __name__ == '__main__':
 
-X_train, y_train, X_test,  y_test = split_dataset(X, y, test_size=0.2, shuffle=True)
+    start_time = time.time()
 
-print("X_train: ", X_train.shape)
-print("X_test: ", X_test.shape)
-print("y_train: ", y_train.shape)
-print("y_test: ", y_test.shape)
+    ds = Dataset()
+
+    # data load
+    X, y = ds.load_dataset('train_susy.csv')
+    # print(X.shape, y.shape)
+
+    # split train and test
+    # X_train, y_train, X_test, y_test = split_dataset(X, y, 0.2, shuffle=True)
+    # print(X_train.shape, y_train.shape, X_test.shape, y_test.shape)
+
+    X_train, y_train = X, y
+    X_test, y_test = ds.load_dataset('test_susy.csv')
+    print("X_train: ", X_train.shape)
+    print("X_test: ", X_test.shape)
+    print("y_train: ", y_train.shape)
+    print("y_test: ", y_test.shape)
 
 
-clf = SVM(n_iters=1000)
-clf.fit(X_train, y_train)
-predictions = clf.predict(X_test)
-print("predictions: ", predictions)
-print("y_test: ", y_test)
+    clf = SVM(n_iters=10)
+    clf.fit(X_train, y_train)
+    y_pred = clf.predict(X_test)
+    print("predictions: ", y_pred)
+    print("y_test: ", y_test)
+
+    end_time = time.time()
 
 
 
-print("SVM Accuracy: ", accuracy(y_test, predictions))
+    print('===================================================Performance on test set')
+    print('SVM Accuracy ', accuracy_score(y_true=y_test, y_pred=y_pred))
+    print('SVM Recall score ', recall_score(y_true=y_test, y_pred=y_pred))
+    print('SVM Precision score ', precision_score(y_true=y_test, y_pred=y_pred))
+    print("SVM Latency on centralized trusted:", end_time - start_time)
 
-import matplotlib.pyplot as plt
 
-#plotting the accuracy
-plt.plot(accuracy_list)
-plt.xlabel('Iterations')
-plt.ylabel('Accuracy')
-plt.title('Accuracy vs Iterations')
-plt.show()
+# import matplotlib.pyplot as plt
 
-#plotting the loss
-plt.plot(loss_list)
-plt.xlabel('Iterations')
-plt.ylabel('Loss')
-plt.title('Loss vs Iterations')
-plt.show()
+# #plotting the accuracy
+# plt.plot(accuracy_list)
+# plt.xlabel('Iterations')
+# plt.ylabel('Accuracy')
+# plt.title('Accuracy vs Iterations')
+# plt.show()
+
+# #plotting the loss
+# plt.plot(loss_list)
+# plt.xlabel('Iterations')
+# plt.ylabel('Loss')
+# plt.title('Loss vs Iterations')
+# plt.show()

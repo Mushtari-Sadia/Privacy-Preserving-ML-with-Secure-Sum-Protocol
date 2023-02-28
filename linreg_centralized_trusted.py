@@ -1,22 +1,9 @@
 # Importing libraries
 
 import numpy as np
-
 import pandas as pd
-
-def split_dataset(X, y, test_size=0.2, shuffle=True):
-    if shuffle:
-        indices = np.random.permutation(X.shape[0])
-    else:
-        indices = np.arange(X.shape[0])
-
-    # print(indices)
-    training_count = int(X.shape[0] * (1 - test_size))
-
-    training_idx, test_idx = indices[:training_count], indices[training_count:]
-
-    X_train, y_train, X_test, y_test = X[training_idx, :], y[training_idx], X[test_idx, :], y[test_idx]
-    return X_train, y_train, X_test, y_test
+from sklearn.metrics import r2_score
+from dataset import *
 
 def mean_absolute_error(y_true, y_pred):
     return np.mean(np.abs(y_true - y_pred))
@@ -56,7 +43,7 @@ class LinearRegression():
         # gradient descent learning
 
         for i in range(self.iterations):
-            print("===========================Iteration: {}".format(i + 1))
+            # print("===========================Iteration: {}".format(i + 1))
             self.update_weights()
 
         return self
@@ -65,17 +52,23 @@ class LinearRegression():
 
     def update_weights(self):
         Y_pred = self.predict(self.X)
-
+        print("Y_pred: {}".format(Y_pred))
+        loss_pi = mean_squared_error(self.Y, Y_pred)
+        
+        print("Loss: {}".format(loss_pi))
         # print mean squared error, mean absolute error, root mean squared error
-        print("MSE: {}".format(mean_squared_error(self.Y, Y_pred)))
-        print("MAE: {}".format(mean_absolute_error(self.Y, Y_pred)))
-        print("RMSE: {}".format(root_mean_squared_error(self.Y, Y_pred)))
+        # print("MSE: {}".format(mean_squared_error(self.Y, Y_pred)))
+        # print("MAE: {}".format(mean_absolute_error(self.Y, Y_pred)))
+        # print("RMSE: {}".format(root_mean_squared_error(self.Y, Y_pred)))
 
         # calculate gradients
 
         dW = - (2 * (self.X.T).dot(self.Y - Y_pred)) / self.m
 
         db = - 2 * np.sum(self.Y - Y_pred) / self.m
+
+        print("dW: {}".format(dW))
+        print("db: {}".format(db))
 
         # update weights
 
@@ -95,37 +88,41 @@ class LinearRegression():
 
 def main():
     # Importing dataset
+    ds = Dataset()
+    # data load
+    X, y = ds.load_dataset('train_bike.csv')
+    # print(X.shape, y.shape)
 
-    df = pd.read_csv("bike.csv")
+    # split train and test
+    # X_train, y_train, X_test, y_test = split_dataset(X, y, 0.2, shuffle=True)
+    # print(X_train.shape, y_train.shape, X_test.shape, y_test.shape)
 
-    X = df.iloc[:, :-1].values
-
-    Y = df.iloc[:, 1].values
-
-    # Splitting dataset into train and test set
-
-    X_train, Y_train, X_test,  Y_test = split_dataset(X, Y, 0.2)
+    X_train, y_train = X, y
+    X_test, y_test = ds.load_dataset('test_bike.csv')
 
     print(X_train.shape)
     print(X_test.shape)
-    print(Y_train.shape)
-    print(Y_test.shape)
+    print(y_train.shape)
+    print(y_test.shape)
 
     # Model training
 
-    model = LinearRegression(iterations=1000, learning_rate=0.01)
+    model = LinearRegression(iterations=10, learning_rate=0.1)
 
-    model.fit(X_train, Y_train)
+    model.fit(X_train, y_train)
 
     # Prediction on test set
 
     Y_pred = model.predict(X_test)
+    print(Y_pred)
+    print(y_test)
 
     #print mean squared error, mean absolute error, root mean squared error for test set
-    print("=========================================Test set")
-    print("MSE: {}".format(mean_squared_error(Y_test, Y_pred)))
-    print("MAE: {}".format(mean_absolute_error(Y_test, Y_pred)))
-    print("RMSE: {}".format(root_mean_squared_error(Y_test, Y_pred)))
+    # print("=========================================Test set")
+    print("R2: {}".format(r2_score(y_test, Y_pred)))
+    print("MSE: {}".format(mean_squared_error(y_test, Y_pred)))
+    print("MAE: {}".format(mean_absolute_error(y_test, Y_pred)))
+    print("RMSE: {}".format(root_mean_squared_error(y_test, Y_pred)))
 
 
 

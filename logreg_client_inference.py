@@ -2,23 +2,31 @@ import pickle
 from logreg import *
 import sys
 import numpy as np
+import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score
+from dataset import *
+
+ds = Dataset()
 
 client_no = int(sys.argv[1])
 scenario = sys.argv[2]
+
+
+X,y_true = ds.load_dataset("test_susy.csv")
+n_attributes = X.shape[1]
+
 #load params
 try : 
     with open('params.pkl', 'rb') as f:
         params = pickle.load(f)
 except :
     print("could not load params")
-    params = np.random.randn(19)
+    params = np.random.randn(n_attributes+1)
 
-params = params[:18]
+params = params[:n_attributes]
 
 model = LogisticRegression(client_no=client_no)
 model.set_params(params)
-X,y_true = load_dataset("test_susy.csv") 
 y_pred = model.predict(X)
 # for i in range(len(y_pred)):
 #     print(y_pred[i])
@@ -38,6 +46,6 @@ with open(scenario+'_metrics'+str(client_no)+'.txt', 'a') as f:
     f.write("Precision for client "+str(client_no)+": "+str(precision)+"\n")
     f.write("Recall for client "+str(client_no)+": "+str(recall)+"\n")
 
-print("Accuracy for client",client_no,": ",accuracy)
-print("Precision for client",client_no,": ",precision)
-print("Recall for client",client_no,": ",recall)
+print("LOGREG: Accuracy for client",client_no,": ",accuracy)
+print("LOGREG: Precision for client",client_no,": ",precision)
+print("LOGREG: Recall for client",client_no,": ",recall)

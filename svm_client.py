@@ -1,7 +1,6 @@
 import pickle
-from logreg import *
+from svm import *
 import sys
-from dataset import *
 
 client_no = int(sys.argv[1])
 
@@ -16,8 +15,16 @@ except :
     n_attributes = x.shape[1]
     params = np.random.randn(n_attributes)
 
-model = LogisticRegression(client_no=client_no)
+try : 
+    with open('bias.pkl', 'rb') as f:
+        bias = pickle.load(f)
+except :
+    print("randomly initializing bias")
+    bias = 0
+
+model = SupportVectorMachine(client_no=client_no,lr = 0.00001)
 print("params")
 print(params)
 model.set_params(params)
+model.set_bias(bias)
 model.run()

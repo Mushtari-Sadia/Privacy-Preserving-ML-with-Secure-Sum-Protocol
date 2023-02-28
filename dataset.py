@@ -1,39 +1,45 @@
 import pandas as pd
-# df = pd.read_csv("parkinsons.csv")
+import numpy as np
 
-# rows = df.shape[0]
-# #shuffle rows of df
-# print(df.head(5))
-# df = df.sample(frac=1)
-# print(df.head(5))
+class Dataset:
+    def load_dataset(self,path):
+        if 'bike' in path:
+            df = pd.read_csv(path)
+            y = df['cnt'].values
+            X = df.drop(columns=['cnt']).values
+            X = (X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0))
+            y = (y - y.min(axis=0)) / (y.max(axis=0) - y.min(axis=0))
+            print("X.shape",X.shape)
+            return X, y
+    
+        elif 'susy' in path:
+            df = pd.read_csv(path)
+            y = df.iloc[:, 0].values
+            X = df.drop(df.columns[0], axis=1).values
+            X = (X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0))
+            print("X.shape",X.shape)
+            return X, y
 
-# train, test = df[:int(rows*0.8)], df[int(rows*0.8):]
 
-# train.to_csv("train_parkinsons.csv", index=False)
-# test.to_csv("test_parkinsons.csv",index=False)
+    def split_dataset(self,X, y, n_partition, pi, shuffle=False):
+        if shuffle:
+            indices = np.random.permutation(X.shape[0])
+        else:
+            indices = np.arange(X.shape[0])
+        # partition the data to n_partition and take the pi-th partition as training set
+        partition_size = int(X.shape[0] / n_partition)
+        training_idx = indices[pi * partition_size: (pi + 1) * partition_size]
+        X_train, y_train = X[training_idx, :], y[training_idx]
 
-# define the file path and chunk size
-file_path = 'SUSY.csv'
-chunk_size = 10000
+        return X_train, y_train
 
-# create an empty dataframe to hold the data
-df = pd.DataFrame()
+    def dataloader(self,total_clients, client_no, path):
+        x, y = self.load_dataset(path)
+        print(x.shape)
+        print(y.shape)
+        x_train, y_train = self.split_dataset(x, y, total_clients, client_no-1)
+        print(x_train.shape)
+        print(y_train.shape)
+        n_attributes = x_train.shape[1]
 
-# iterate over the file in chunks and append to the empty dataframe
-i=0
-for chunk in pd.read_csv(file_path, chunksize=chunk_size):
-    df = df.append(chunk)
-    if i==3:
-        break
-print(df.shape)
-print(df.head(5))
-rows = df.shape[0]
-
-# #shuffle rows of df
-df = df.sample(frac=1)
-
-train, test = df[:int(rows*0.8)], df[int(rows*0.8):]
-
-train.to_csv("train_susy.csv", index=False)
-test.to_csv("test_susy.csv",index=False)
-
+        return x_train, y_train, n_attributes

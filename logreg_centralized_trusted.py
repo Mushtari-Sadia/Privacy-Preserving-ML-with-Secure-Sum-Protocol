@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import time
 from sklearn.metrics import accuracy_score, precision_score, recall_score
+from dataset import *
+
 def load_dataset(path):
     """
     function for reading data from csv
@@ -120,8 +122,9 @@ if __name__ == '__main__':
 
     start_time = time.time()
 
+    ds = Dataset()
     # data load
-    X, y = load_dataset('train_susy.csv')
+    X, y = ds.load_dataset('train_susy.csv')
     # print(X.shape, y.shape)
 
     # split train and test
@@ -129,7 +132,7 @@ if __name__ == '__main__':
     # print(X_train.shape, y_train.shape, X_test.shape, y_test.shape)
 
     X_train, y_train = X, y
-    X_test, y_test = load_dataset('test_susy.csv')
+    X_test, y_test = ds.load_dataset('test_susy.csv')
 
     # training
     params = np.random.rand(X_train.shape[1]+1)
@@ -149,7 +152,7 @@ if __name__ == '__main__':
 
     # # performance on test set
     print('===================================================Performance on test set')
-    print('Accuracy ', accuracy_score(y_true=y_test, y_pred=y_pred))
-    print('Recall score ', recall_score(y_true=y_test, y_pred=y_pred))
-    print('Precision score ', precision_score(y_true=y_test, y_pred=y_pred))
-    print("Latency on centralized trusted:", end_time - start_time)
+    print('LOGREG: Accuracy ', accuracy_score(y_true=y_test, y_pred=y_pred))
+    print('LOGREG: Recall score ', recall_score(y_true=y_test, y_pred=y_pred))
+    print('LOGREG: Precision score ', precision_score(y_true=y_test, y_pred=y_pred))
+    print("LOGREG: Latency on centralized trusted:", end_time - start_time)

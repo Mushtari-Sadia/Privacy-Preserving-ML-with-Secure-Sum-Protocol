@@ -13,6 +13,9 @@ for i in {1..3}; do
     docker cp "$(pwd)/test_parkinsons.csv" client$i:test_parkinsons.csv
     docker cp "$(pwd)/train_susy.csv" client$i:train_susy.csv
     docker cp "$(pwd)/test_susy.csv" client$i:test_susy.csv
+    docker cp "$(pwd)/train_bike.csv" client$i:train_bike.csv
+    docker cp "$(pwd)/test_bike.csv" client$i:test_bike.csv
+    docker cp "$(pwd)/dataset.py" client$i:dataset.py
     # docker cp "$(pwd)/ppml_client.py" client$i:ppml_client.py
 done
 
@@ -22,5 +25,6 @@ docker cp "$(pwd)/phase_1.py" server:phase_1.py
 docker cp "$(pwd)/phase_2.py" server:phase_2.py
 docker cp "$(pwd)/phase_3.py" server:phase_3.py
 docker cp "$(pwd)/phase_4.py" server:phase_4.py
+docker cp "$(pwd)/dataset.py" client$i:dataset.py
 # docker cp "$(pwd)/ppml_server.py" server:ppml_server.py
 # docker cp "$(pwd)/test_python.txt" server:test_python.txt

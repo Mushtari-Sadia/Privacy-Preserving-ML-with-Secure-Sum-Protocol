@@ -1,51 +1,7 @@
 import pandas as pd
 import numpy as np
 import pickle
-
-def load_dataset(path):
-    csv = pd.read_csv(path)
-
-    # csv = csv.drop('name', axis=1)
-
-
-    # print(csv['status'].value_counts())
-
-    y = csv.iloc[:, 0].values
-
-    X = csv.drop(csv.columns[0], axis=1).values
-
-    X = (X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0))
-
-    print("X.shape",X.shape)
-    return X, y
-
-
-def split_dataset(X, y, n_partition, pi, shuffle=False):
-    if shuffle:
-        indices = np.random.permutation(X.shape[0])
-    else:
-        indices = np.arange(X.shape[0])
-    # partition the data to n_partition and take the pi-th partition as training set
-    partition_size = int(X.shape[0] / n_partition)
-    training_idx = indices[pi * partition_size: (pi + 1) * partition_size]
-    X_train, y_train = X[training_idx, :], y[training_idx]
-
-    return X_train, y_train
-
-def dataloader(total_clients, client_no):
-    x, y = load_dataset('train_susy.csv')
-    print(x.shape)
-    print(y.shape)
-    x_train, y_train = split_dataset(x, y, total_clients, client_no-1)
-    print(x_train.shape)
-    print(y_train.shape)
-
-    n_attributes = x_train.shape[1]
-
-    intercept = np.ones((x_train.shape[0], 1))
-    x_train = np.concatenate((intercept, x_train), axis=1)
-
-    return x_train, y_train, n_attributes
+from dataset import *
 
 class LogisticRegression:
     def __init__(self, client_no, lr=0.1, n_iter=10):
@@ -53,7 +9,8 @@ class LogisticRegression:
         self.n_iter = n_iter
         self.converged = False
         self.client_no = client_no
-        self.x_train, self.y_train, self.n_attributes = dataloader(3, client_no)
+        ds = Dataset()
+        self.x_train, self.y_train, self.n_attributes = ds.dataloader(3, client_no,'train_susy.csv')
         self.params = np.random.rand(self.n_attributes + 1)
         
     def sigmoid(self,x):
