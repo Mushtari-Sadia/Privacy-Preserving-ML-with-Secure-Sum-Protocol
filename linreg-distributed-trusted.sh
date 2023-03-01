@@ -27,7 +27,7 @@ start_time=$(date +%s)
 
 # until convergence is true
 # temporarily using 10 epochs
-for i in {1}; do
+for i in {1..10}; do
 
     # run all linreg_client.py in all clients
     echo "Epoch $i"

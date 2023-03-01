@@ -142,7 +142,7 @@ if __name__ == '__main__':
     assert len(X_train.shape) == 2
 
     classifier = LogisticRegression(params)
-    classifier.fit(X_train, y_train, 20, 0.1)
+    classifier.fit(X_train, y_train, 10, 0.1)
 
     # testing
     y_pred = classifier.predict(X_test)

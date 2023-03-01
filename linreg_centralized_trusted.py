@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import r2_score
 from dataset import *
+import time
 
 def mean_absolute_error(y_true, y_pred):
     return np.mean(np.abs(y_true - y_pred))
@@ -107,7 +108,7 @@ def main():
 
     # Model training
 
-    model = LinearRegression(iterations=10, learning_rate=0.1)
+    model = LinearRegression(iterations=6, learning_rate=0.1)
 
     model.fit(X_train, y_train)
 
@@ -127,4 +128,8 @@ def main():
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     main()
+    end_time = time.time()
+    print("LINREG Latency on centralized trusted:", end_time - start_time)
+

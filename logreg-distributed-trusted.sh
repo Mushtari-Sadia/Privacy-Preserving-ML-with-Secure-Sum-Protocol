@@ -23,7 +23,7 @@ done
 start_time=$(date +%s)
 # until convergence is true
 # temporarily using 10 epochs
-for i in {1..20}; do
+for i in {1..10}; do
 
     # run all logreg_client.py in all clients
     echo "Epoch $i"

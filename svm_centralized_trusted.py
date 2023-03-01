@@ -79,8 +79,8 @@ class SVM:
             dw = 0
             db = 0
             for idx, x_i in enumerate(X):
-                print('idx',idx)
-                print('x_i',x_i.shape)
+                # print('idx',idx)
+                # print('x_i',x_i.shape)
                 condition = y_[idx] * (np.dot(x_i, self.w) - self.b) >= 1
                 if condition:
                     dw += self.lr * (2 * self.lambda_param * self.w)
