@@ -268,7 +268,7 @@ party. On the other hand, the outer summation involves data across parties, and 
 
       This message shows that your installation appears to be working correctly.
 
-2. Run [build.sh](build.sh) to create the environment. 
+2. Run [build.sh](scripts/build.sh) to create the environment. 
    
         chmod +x build.sh
         ./build.sh
@@ -287,77 +287,77 @@ party. On the other hand, the outer summation involves data across parties, and 
 ## Description Of Implementation
 
 ### Building the environment
-- [build.sh](build.sh)
+- [build.sh](scripts/build.sh)
   ![build](images/build.png)
-  | ---- [create-containers.sh](create-containers.sh)
+  | ---- [create-containers.sh](scripts/create-containers.sh)
   
-  | ---- [install-packages-to-containers.sh](install-packages-to-containers.sh)
+  | ---- [install-packages-to-containers.sh](scripts/install-packages-to-containers.sh)
   
-  | ---- [copy-files-to-containers.sh](copy-files-to-containers.sh)
+  | ---- [copy-files-to-containers.sh](scripts/copy-files-to-containers.sh)
   
   sends all the scripts needed to run locally on each computer, such as rsa implementation, logistic regression etc.
   
-  | ---- [send-keys-to-containers.sh](send-keys-to-containers.sh)
+  | ---- [send-keys-to-containers.sh](scripts/send-keys-to-containers.sh)
 
   Generates private and public key of each container and sends the public keys to every container.
 
   ![send-keys-to-containers](images/send-keys-to-containers.png)
-  -    | ----------------- [phase_1.py](phase_1.py)
+  -    | ----------------- [phase_1.py](scripts/phase_1.py)
       generates private and public key of each client and server and then stores them in pickle files locally.
 
 Now everyone has all necessary local scripts, all public keys and their own private keys.
 
 ### Scenario : Centralized Trusted
-- [centralized_trusted.py](centralized_trusted.py)
+- [centralized_trusted.py](scripts/centralized_trusted.py)
     Basic logistic regression performed on the entire dataset, on a central system, without any partitioning.
 
 ### Scenario : Distributed Trusted
-[distributed-trusted.sh](distributed-trusted.sh)
+[distributed-trusted.sh](scripts/distributed-trusted.sh)
 
-  |-----[logreg.py](logreg.py)
+  |-----[logreg.py](scripts/logreg.py)
   
-  |-----[logreg_client.py](logreg_client.py)
+  |-----[logreg_client.py](scripts/logreg_client.py)
   
-  |-----[logreg_server.py](logreg_server.py)
+  |-----[logreg_server.py](scripts/logreg_server.py)
   
-  |-----[logreg_client_inference.py](logreg_client_inference.py)
+  |-----[logreg_client_inference.py](scripts/logreg_client_inference.py)
 
   Restart containers if needed:
 ![distributed-trusted1.png](images/distributed-trusted1.png)
   Remove any previous loss, gradient or parameters file:
 ![distributed-trusted2.png](images/distributed-trusted2.png)
-  For a certain number of epochs, run [logreg_client.py](logreg_client.py) which loads previously saved model, runs it for one epoch, saves loss and gradient into files, saves the model. Then, the loss and gradient files are sent to server using netcat. Until they reach the server, the file is resent over and over.
+  For a certain number of epochs, run [logreg_client.py](scripts/logreg_client.py) which loads previously saved model, runs it for one epoch, saves loss and gradient into files, saves the model. Then, the loss and gradient files are sent to server using netcat. Until they reach the server, the file is resent over and over.
 ![distributed-trusted3.png](images/distributed-trusted3.png)
 ![distributed-trusted4.png](images/distributed-trusted4.png)
 
- In the server, [logreg_server.py](logreg_server.py) is run, which aggregates all the losses and gradients received from each client, generates weights of the model, stores them in file 'params.pkl'. The file is then sent to all clients.
+ In the server, [logreg_server.py](scripts/logreg_server.py) is run, which aggregates all the losses and gradients received from each client, generates weights of the model, stores them in file 'params.pkl'. The file is then sent to all clients.
 ![distributed-trusted5.png](images/distributed-trusted5.png)
 
 
- Finally, after the model has been trained for specified epochs, the [logreg_client_inference.py](logreg_client_inference.py) file is run on each client locally. Prediction on the test set is generated in each client, and metrics are calculated.
+ Finally, after the model has been trained for specified epochs, the [logreg_client_inference.py](scripts/logreg_client_inference.py) file is run on each client locally. Prediction on the test set is generated in each client, and metrics are calculated.
 ![distributed-trusted6.png](images/distributed-trusted6.png)
 
 ### Scenario : Distributed Untrusted
-[distributed-untrusted.sh](distributed-untrusted.sh)
+[distributed-untrusted.sh](scripts/distributed-untrusted.sh)
 
-|-----[logreg.py](logreg.py)
+|-----[logreg.py](scripts/logreg.py)
 
-|-----[logreg_client.py](logreg_client.py)
+|-----[logreg_client.py](scripts/logreg_client.py)
 
-|-----[logreg_server.py](logreg_server.py)
+|-----[logreg_server.py](scripts/logreg_server.py)
 
-|-----[logreg_client_inference.py](logreg_client_inference.py)
+|-----[logreg_client_inference.py](scripts/logreg_client_inference.py)
 
-|-----[run.sh](run.sh)
+|-----[run.sh](scripts/run.sh)
 
-  - |-----[encryption.sh](encryption.sh)
-    - |-----[phase_2.py](phase_2.py)
-    - |-----[rsa.py](rsa.py)
-  - |-----[decryption.sh](decryption.sh)
-    - |-----[phase_3.py](phase_3.py)
-    - |-----[phase_4.py](phase_4.py)
+  - |-----[encryption.sh](scripts/encryption.sh)
+    - |-----[phase_2.py](scripts/phase_2.py)
+    - |-----[rsa.py](scripts/rsa.py)
+  - |-----[decryption.sh](scripts/decryption.sh)
+    - |-----[phase_3.py](scripts/phase_3.py)
+    - |-----[phase_4.py](scripts/phase_4.py)
   
-The distributed untrusted scenario is similar to the trusted scenario, except now the losses and gradients are sent from each client to the server following the secure sum protocol. The secure sum protocol is implemented in the [run.sh](run.sh) script. The name of the file that has to be sent is provided as a command line argument to this script.
+The distributed untrusted scenario is similar to the trusted scenario, except now the losses and gradients are sent from each client to the server following the secure sum protocol. The secure sum protocol is implemented in the [run.sh](scripts/run.sh) script. The name of the file that has to be sent is provided as a command line argument to this script.
 
 <p align="center">
   <img src="images/distributed-untrusted1.png " alt="Alt Text">
