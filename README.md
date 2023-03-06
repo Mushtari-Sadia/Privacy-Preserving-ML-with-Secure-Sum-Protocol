@@ -135,8 +135,6 @@ Accuracy  0.7692307692307693
 Recall score  1.0
 Precision score  0.7692307692307693 -->
 
-# 12th Week Update
-
 <!-- <embed src="resources/1705037_1705051_ProjectProposal.pdf"
  type="application/pdf"> -->
 ## Problem Definition
@@ -197,7 +195,7 @@ Most machine learning algorithms can be formulated as an optimization problem, w
 Note that the inner summation in each of those equations denote computations that are based on data belonging to a single party, and thus can be completely evaluated by the
 party. On the other hand, the outer summation involves data across parties, and thus this summation should be computed in a secure, privacy-preserving manner. Irrespective of the machine learning algorithm and its cost function, the outer summation always involves a simple sum over N scalars, which can be computed using a secure sum protocol.
 
-## Implementation (Incomplete)
+## Implementation
 1. Created a distributed systems scenario with Docker.
      - 3 computers (container names : client1, client2, client3)
      -  A mediator (container name : server)
